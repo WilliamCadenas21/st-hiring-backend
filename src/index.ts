@@ -4,8 +4,9 @@ import dbConfig from './knexfile';
 import { createEventDAL } from './dal/events.dal';
 import { createTicketDAL } from './dal/tickets.dal';
 import { createGetEventsController } from './controllers/get-events';
-import mongoInit from './database/mongo/mongoDb';
-import mobileConfig from './database/mongo/models';
+import mongoInit from './database/mongo/mongoConnection';
+import { getMobileSettings } from './controllers/getMobileSettings.controller';
+import { getMobileSettingsByClientId } from './controllers/getMobileSettingsByClientId.controller';
 
 mongoInit();
 
@@ -24,17 +25,9 @@ app.use('/health', (req, res) => {
 
 app.use('/events', createGetEventsController({ eventsDAL: eventDAL, ticketsDAL: TicketDAL }));
 
-app.use('/mobile-config', async (_req, res) => {
-  try {
-    const mobileConfigResult = await mobileConfig.find({});
-    console.log(mobileConfigResult);
+app.use('/mobile-config', getMobileSettings());
 
-    res.send(mobileConfigResult);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+app.use('/mobile-config-by-client-id', getMobileSettingsByClientId());
 
 app.use('/', (_req, res) => {
   res.json({ message: 'Hello API' });
