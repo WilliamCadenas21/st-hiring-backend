@@ -8,13 +8,12 @@ const deliveryMethodsSchema = new Schema({
   selected: { type: Boolean, required: true },
 });
 
-
 const mobileConfig = new Schema({
   clientId: { type: Number, required: true, unique: true },
   deliveryMethods: {
     type: Array,
     required: true,
-    items: deliveryMethodsSchema
+    items: deliveryMethodsSchema,
   },
   fulfillmentFormat: { rfid: { type: Boolean, required: true }, print: { type: Boolean, required: true } },
   printer: {

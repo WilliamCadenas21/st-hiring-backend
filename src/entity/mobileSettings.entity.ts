@@ -9,7 +9,7 @@ export interface MobileSettings {
   }[];
   fulfillmentFormat: { rfid: boolean; print: boolean };
   printer: {
-    id: null;
+    id: string;
   };
   printingFormat: { formatA: boolean; formatB: boolean };
   scanning: {

@@ -6,7 +6,7 @@ export const mobileSettingsService = () => {
       const configs = await mobileSettingsRepository().findAll();
       return configs;
     },
-    getMobileSettingsByClientId: async (clientId: string) => {
+    getMobileSettingsByClientId: async (clientId: number) => {
       const config = await mobileSettingsRepository().findByClientId(clientId);
       return config;
     },
@@ -14,7 +14,7 @@ export const mobileSettingsService = () => {
       const newSettings = await mobileSettingsRepository().create(settingsData);
       return newSettings;
     },
-    updateMobileSettings: async (clientId: string, updateData: any) => {
+    updateMobileSettings: async (clientId: number, updateData: any) => {
       const updatedSettings = await mobileSettingsRepository().updateByClientId(clientId, updateData);
       return updatedSettings;
     },
