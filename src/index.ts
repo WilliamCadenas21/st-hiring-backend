@@ -9,6 +9,9 @@ import { getMobileSettings } from './controllers/getMobileSettings.controller';
 import { getMobileSettingsByClientId } from './controllers/getMobileSettingsByClientId.controller';
 import { validateQuery } from './middlewares/validateQuery';
 import { ClientIdQuerySchema } from './validations/schemas/clientId.schema';
+import { validateBody } from './middlewares/validateBody';
+import { UpdateMobileSettingsSchema } from './validations/schemas/body.schema';
+import { putMobileSettingsByClientId } from './controllers/putMobileSettingsByClienId.controller';
 
 mongoInit();
 
@@ -21,17 +24,21 @@ const TicketDAL = createTicketDAL(Knex);
 
 const app = express();
 
-app.use('/health', (req, res) => {
+app.use(express.json());
+
+app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/events', createGetEventsController({ eventsDAL: eventDAL, ticketsDAL: TicketDAL }));
+app.get('/events', createGetEventsController({ eventsDAL: eventDAL, ticketsDAL: TicketDAL }));
 
-app.use('/mobile-config', getMobileSettings());
+app.get('/mobile-config', getMobileSettings());
 
-app.use('/mobile-config-by-client-id', validateQuery(ClientIdQuerySchema), getMobileSettingsByClientId());
+app.get('/mobile-config-by-client-id', validateQuery(ClientIdQuerySchema), getMobileSettingsByClientId());
 
-app.use('/', (_req, res) => {
+app.put('/update-config-by-client-id', validateBody(UpdateMobileSettingsSchema), putMobileSettingsByClientId());
+
+app.get('/', (_req, res) => {
   res.json({ message: 'Hello API' });
 });
 

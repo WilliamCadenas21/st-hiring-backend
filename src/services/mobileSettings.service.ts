@@ -1,3 +1,4 @@
+import { MobileSettings } from '../entity/mobileSettings.entity';
 import { mobileSettingsRepository } from '../repository/mobileSettings.repository';
 
 export const mobileSettingsService = () => {
@@ -14,7 +15,7 @@ export const mobileSettingsService = () => {
       const newSettings = await mobileSettingsRepository().create(settingsData);
       return newSettings;
     },
-    updateMobileSettings: async (clientId: number, updateData: any) => {
+    updateMobileSettings: async (clientId: number, updateData: MobileSettings) => {
       const updatedSettings = await mobileSettingsRepository().updateByClientId(clientId, updateData);
       return updatedSettings;
     },
