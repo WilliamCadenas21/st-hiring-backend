@@ -1,21 +1,12 @@
 export interface MobileSettings {
   clientId: number;
-  deliveryMethods: [
-    {
-      name: string;
-      enum: string;
-      order: number;
-      isDefault: boolean;
-      selected: boolean;
-    },
-    {
-      name: string;
-      enum: string;
-      order: number;
-      isDefault: boolean;
-      selected: boolean;
-    },
-  ];
+  deliveryMethods: {
+    name: string;
+    enum: string;
+    order: number;
+    isDefault: boolean;
+    selected: boolean;
+  }[];
   fulfillmentFormat: { rfid: boolean; print: boolean };
   printer: {
     id: null;

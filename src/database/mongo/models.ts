@@ -1,16 +1,21 @@
 import mongoose, { Schema } from 'mongoose';
 
+const deliveryMethodsSchema = new Schema({
+  name: { type: String, required: true },
+  enum: { type: String, required: true },
+  order: { type: Number, required: true },
+  isDefault: { type: Boolean, required: true },
+  selected: { type: Boolean, required: true },
+});
+
+
 const mobileConfig = new Schema({
   clientId: { type: Number, required: true, unique: true },
-  deliveryMethods: [
-    {
-      name: { type: String, required: true },
-      enum: { type: String, required: true },
-      order: { type: Number, required: true },
-      isDefault: { type: Boolean, required: true },
-      selected: { type: Boolean, required: true },
-    },
-  ],
+  deliveryMethods: {
+    type: Array,
+    required: true,
+    items: deliveryMethodsSchema
+  },
   fulfillmentFormat: { rfid: { type: Boolean, required: true }, print: { type: Boolean, required: true } },
   printer: {
     id: { type: String, required: true },

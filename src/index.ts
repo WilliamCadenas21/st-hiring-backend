@@ -7,6 +7,8 @@ import { createGetEventsController } from './controllers/get-events';
 import mongoInit from './database/mongo/mongoConnection';
 import { getMobileSettings } from './controllers/getMobileSettings.controller';
 import { getMobileSettingsByClientId } from './controllers/getMobileSettingsByClientId.controller';
+import { validateQuery } from './middlewares/validateQuery';
+import { ClientIdQuerySchema } from './validations/schemas/clientId.schema';
 
 mongoInit();
 
@@ -27,7 +29,7 @@ app.use('/events', createGetEventsController({ eventsDAL: eventDAL, ticketsDAL: 
 
 app.use('/mobile-config', getMobileSettings());
 
-app.use('/mobile-config-by-client-id', getMobileSettingsByClientId());
+app.use('/mobile-config-by-client-id', validateQuery(ClientIdQuerySchema), getMobileSettingsByClientId());
 
 app.use('/', (_req, res) => {
   res.json({ message: 'Hello API' });

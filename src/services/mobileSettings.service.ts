@@ -9,6 +9,14 @@ export const mobileSettingsService = () => {
     getMobileSettingsByClientId: async (clientId: string) => {
       const config = await mobileSettingsRepository().findByClientId(clientId);
       return config;
-    }
+    },
+    createMobileSettings: async (settingsData: any) => {
+      const newSettings = await mobileSettingsRepository().create(settingsData);
+      return newSettings;
+    },
+    updateMobileSettings: async (clientId: string, updateData: any) => {
+      const updatedSettings = await mobileSettingsRepository().updateByClientId(clientId, updateData);
+      return updatedSettings;
+    },
   };
 };

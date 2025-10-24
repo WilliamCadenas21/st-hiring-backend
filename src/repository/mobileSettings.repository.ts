@@ -12,9 +12,17 @@ export const mobileSettingsRepository = (): IMobileSettingsRepository => {
       const setting: MobileSettings | null = await mobileConfigModel.findOne({ clientId });
       return setting;
     },
-    // async create(mobileSettings: MobileSettings): Promise<MobileSettings> {
-    //   const createdSettings: MobileSettings = await mobileConfigModel.create(mobileSettings);
-    //   return createdSettings;
-    // },
+    async create(mobileSettings: MobileSettings): Promise<MobileSettings> {
+      const created = await mobileConfigModel.create(mobileSettings);
+      return created.toObject() as MobileSettings;
+    },
+    updateByClientId: async (clientId: string, updateData: Partial<MobileSettings>): Promise<MobileSettings | null> => {
+      const updatedSetting = await mobileConfigModel.findOneAndUpdate(
+        { clientId },
+        updateData,
+        { new: true }
+      );
+      return updatedSetting ? (updatedSetting.toObject() as MobileSettings) : null;
+    },
   };
 };
