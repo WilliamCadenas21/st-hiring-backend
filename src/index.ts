@@ -5,7 +5,6 @@ import { createEventDAL } from './dal/events.dal';
 import { createTicketDAL } from './dal/tickets.dal';
 import { createGetEventsController } from './controllers/get-events';
 import mongoInit from './database/mongo/mongoConnection';
-import { getMobileSettings } from './controllers/getMobileSettings.controller';
 import { getMobileSettingsByClientId } from './controllers/getMobileSettingsByClientId.controller';
 import { validateQuery } from './middlewares/validateQuery';
 import { ClientIdQuerySchema } from './validations/schemas/clientId.schema';
@@ -13,7 +12,6 @@ import { validateBody } from './middlewares/validateBody';
 import { UpdateMobileSettingsSchema } from './validations/schemas/body.schema';
 import { putMobileSettingsByClientId } from './controllers/putMobileSettingsByClienId.controller';
 import cors from 'cors';
-
 
 mongoInit();
 
@@ -28,10 +26,9 @@ const app = express();
 
 app.use(express.json());
 
-// Add CORS middleware before other middleware
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Replace with your frontend URL
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -44,11 +41,9 @@ app.get('/health', (req, res) => {
 
 app.get('/events', createGetEventsController({ eventsDAL: eventDAL, ticketsDAL: TicketDAL }));
 
-app.get('/mobile-config', getMobileSettings());
+app.get('/mobile-config', validateQuery(ClientIdQuerySchema), getMobileSettingsByClientId());
 
-app.get('/mobile-config-by-client-id', validateQuery(ClientIdQuerySchema), getMobileSettingsByClientId());
-
-app.put('/update-config-by-client-id', validateBody(UpdateMobileSettingsSchema), putMobileSettingsByClientId());
+app.put('/mobile-config', validateBody(UpdateMobileSettingsSchema), putMobileSettingsByClientId());
 
 app.get('/', (_req, res) => {
   res.json({ message: 'Hello API' });
