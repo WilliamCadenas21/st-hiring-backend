@@ -12,6 +12,8 @@ import { ClientIdQuerySchema } from './validations/schemas/clientId.schema';
 import { validateBody } from './middlewares/validateBody';
 import { UpdateMobileSettingsSchema } from './validations/schemas/body.schema';
 import { putMobileSettingsByClientId } from './controllers/putMobileSettingsByClienId.controller';
+import cors from 'cors';
+
 
 mongoInit();
 
@@ -25,6 +27,16 @@ const TicketDAL = createTicketDAL(Knex);
 const app = express();
 
 app.use(express.json());
+
+// Add CORS middleware before other middleware
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Replace with your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
